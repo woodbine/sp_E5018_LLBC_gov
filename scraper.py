@@ -29,7 +29,7 @@ menuBlock = soup.find('td',{'class':'lbl-styleTableEvenCol-inThisSectionBox'}) #
 pageLinks = menuBlock.findAll('a', href=True)
 
 for pageLink in pageLinks:
-	href = pageLink['href'].encode('utf8')
+	href = pageLink['href']
 	parsed_link = urlparse.urlsplit(href.encode('utf8'))
 	parsed_link = parsed_link._replace(path=urllib.quote(parsed_link.path))
 	encoded_link = parsed_link.geturl()
