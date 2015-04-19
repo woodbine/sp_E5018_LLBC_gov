@@ -2,6 +2,8 @@
 
 import scraperwiki
 import urllib2
+import urllib
+import urlparse
 from datetime import datetime
 from bs4 import BeautifulSoup
 
@@ -29,6 +31,9 @@ pageLinks = menuBlock.findAll('a', href=True)
 for pageLink in pageLinks:
 	href = pageLink['href'].encode('utf8')
 	href = "http://www.lewisham.gov.uk/"+href
+	parsed_link = urlparse.urlsplit(link.encode('utf8'))
+	parsed_link = parsed_link._replace(path=urllib.quote(parsed_link.path))
+	encoded_link = parsed_link.geturl()
   	html2 = urllib2.urlopen(href)
   	soup2 = BeautifulSoup(html2)
   	
