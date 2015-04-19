@@ -6,8 +6,8 @@ from datetime import datetime
 from bs4 import BeautifulSoup
 
 # Set up variables
-entity_id = "E5042_HLBC_gov"
-url = "http://www.hounslow.gov.uk/index/council_and_democracy/budgets_spending/payments_to_suppliers.htm"
+entity_id = "sp_E5018_LLBC_gov "
+url = "http://www.lewisham.gov.uk/mayorandcouncil/aboutthecouncil/finances/council-spending-over-250/Pages/default.aspx"
 
 # Set up functions
 def convert_mth_strings ( mth_string ):
@@ -23,30 +23,30 @@ html = urllib2.urlopen(url)
 soup = BeautifulSoup(html)
 
 # find all entries with the required class
-menuBlock = soup.find('ul',{'id':'leftnav'}) # Use the left hand nav for the page links
+menuBlock = soup.find('td',{'class':'lbl-styleTableEvenCol-inThisSectionBox'}) # Use the left hand nav for the page links
 pageLinks = menuBlock.findAll('a', href=True)
 
 for pageLink in pageLinks:
-	href = pageLink['href']
-	if '/payments_to_supplier' in href:
-		print href
-	  	html2 = urllib2.urlopen(href)
-	  	soup2 = BeautifulSoup(html2)
-	  	
-	  	fileBlocks = soup2.findAll('a', href=True)
-	  	
-		for fileBlock in fileBlocks:
-		  	fileUrl = fileBlock['href']
-		  	if '.csv' in fileUrl:
-			  	fileUrl = "http://www.hounslow.gov.uk/"+fileUrl
-			  	title = fileBlock.contents[0]
-				# create the right strings for the new filename
-				title = title.upper().strip()
-				csvYr = title.split(' ')[1]
-				csvMth = title.split(' ')[0][:3]
-				csvMth = convert_mth_strings(csvMth);
-			
-				filename = entity_id + "_" + csvYr + "_" + csvMth
-				todays_date = str(datetime.now())
-				scraperwiki.sqlite.save(unique_keys=['l'], data={"l": fileUrl, "f": filename, "d": todays_date })
-				print filename
+href = pageLink['href']
+	print href
+  	html2 = urllib2.urlopen(href)
+  	soup2 = BeautifulSoup(html2)
+  	
+  	docBlock = soup2.find('div',{'class':'contentContainer documentsList'})
+  	fileLinks = docBlock.findAll('a', href=True)
+  	
+	for fileLink in fileLinks:
+	  	fileUrl = fileLink['href']
+	  	if '.csv' in fileUrl:
+		  	fileUrl = "http://www.lewisham.gov.uk/"+fileUrl
+		  	title = fileBlock.contents[0]
+			# create the right strings for the new filename
+			title = title.upper().strip()
+			csvYr = title.split(' ')[1]
+			csvMth = title.split(' ')[0][:3]
+			csvMth = convert_mth_strings(csvMth);
+		
+			filename = entity_id + "_" + csvYr + "_" + csvMth
+			todays_date = str(datetime.now())
+			scraperwiki.sqlite.save(unique_keys=['l'], data={"l": fileUrl, "f": filename, "d": todays_date })
+			print filename
