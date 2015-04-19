@@ -28,7 +28,7 @@ pageLinks = menuBlock.findAll('a', href=True)
 
 for pageLink in pageLinks:
 	href = pageLink['href']
-	print href[0:20]
+	href = "http://www.lewisham.gov.uk/"+href
   	html2 = urllib2.urlopen(href)
   	soup2 = BeautifulSoup(html2)
   	
