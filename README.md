@@ -1,1 +1,4 @@
-This is a scraper that runs on [Morph](https://morph.io). To get started [see the documentation](https://morph.io/documentation)
+Functionality:
+
+* Two levels of pages
+* £'s in urls
