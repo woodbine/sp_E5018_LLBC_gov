@@ -8,7 +8,7 @@ from datetime import datetime
 from bs4 import BeautifulSoup
 
 # Set up variables
-entity_id = "sp_E5018_LLBC_gov "
+entity_id = "E5018_LLBC_gov"
 url = "http://www.lewisham.gov.uk/mayorandcouncil/aboutthecouncil/finances/council-spending-over-250/Pages/default.aspx"
 
 # Set up functions
