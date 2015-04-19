@@ -27,7 +27,7 @@ menuBlock = soup.find('td',{'class':'lbl-styleTableEvenCol-inThisSectionBox'}) #
 pageLinks = menuBlock.findAll('a', href=True)
 
 for pageLink in pageLinks:
-href = pageLink['href']
+	href = pageLink['href']
 	print href
   	html2 = urllib2.urlopen(href)
   	soup2 = BeautifulSoup(html2)
