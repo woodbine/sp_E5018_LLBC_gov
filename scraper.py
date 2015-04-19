@@ -28,6 +28,7 @@ pageLinks = menuBlock.findAll('a', href=True)
 
 for pageLink in pageLinks:
 	href = pageLink['href']
+	print href[0:20]
   	html2 = urllib2.urlopen(href)
   	soup2 = BeautifulSoup(html2)
   	
