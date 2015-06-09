@@ -30,10 +30,10 @@ pageLinks = menuBlock.findAll('a', href=True)
 
 for pageLink in pageLinks:
 	href = pageLink['href']
-	parsed_link = urlparse.urlsplit(href.encode('utf8'))
-	parsed_link = parsed_link._replace(path=urllib.quote(parsed_link.path))
-	encoded_link = parsed_link.geturl()
-	fullLink = "http://www.lewisham.gov.uk/"+encoded_link
+	#parsed_link = urlparse.urlsplit(href.encode('utf8'))
+	#parsed_link = parsed_link._replace(path=urllib.quote(parsed_link.path))
+	#encoded_link = parsed_link.geturl()
+	fullLink = "http://www.lewisham.gov.uk/"+href
   	html2 = urllib2.urlopen(fullLink)
   	soup2 = BeautifulSoup(html2)
   	
