@@ -1,21 +1,18 @@
-
 # -*- coding: utf-8 -*-
 
 #### IMPORTS 1.0
 
-import sys
-reload(sys)
-sys.setdefaultencoding('UTF8')
 import os
 import re
 import scraperwiki
 import urllib2
 from datetime import datetime
 from bs4 import BeautifulSoup
-import requests
-from dateutil.parser import parse
 
-#### FUNCTIONS 1.0
+
+#### FUNCTIONS 1.2
+
+import requests     # import requests to validate URL
 
 def validateFilename(filename):
     filenameregex = '^[a-zA-Z0-9]+_[a-zA-Z0-9]+_[a-zA-Z0-9]+_[0-9][0-9][0-9][0-9]_[0-9QY][0-9]$'
@@ -104,7 +101,7 @@ soup = BeautifulSoup(html, 'lxml')
 
 #### SCRAPE DATA
 
-menuBlock = soup.find('td',{'class':'lbl-styleTableEvenCol-inThisSectionBox'})
+menuBlock = soup.find('tr',{'class':'lbl-styleTableOddRow-inThisSectionBox'})
 pageLinks = menuBlock.findAll('a', href=True)
 
 for pageLink in pageLinks:
@@ -112,20 +109,32 @@ for pageLink in pageLinks:
     fullLink = "http://www.lewisham.gov.uk"+href
     html2 = requests.get(fullLink)
     soup2 = BeautifulSoup(html2.text, 'lxml')
-
     docBlock = soup2.find('div',{'class':'contentContainer documentsList'})
     fileLinks = docBlock.findAll('a', href=True)
-
+    links = []
     for fileLink in fileLinks:
         fileUrl = fileLink['href']
         if '.csv' in fileUrl:
-            url = "http://www.lewisham.gov.uk"+fileUrl
-            title = fileLink.contents[0]
-            title = title.upper().strip()
-            csvYr = title.split(' ')[1]
-            csvMth = title.split(' ')[0][:3]
-            csvMth = convert_mth_strings(csvMth.upper())
-            data.append([csvYr, csvMth, url])
+                if 'August 2015' in fileLink.text:
+                     links.append(fileLink)
+                else:
+                    url = "http://www.lewisham.gov.uk"+fileUrl
+                    title = fileLink.contents[0]
+                    title = title.upper().strip()
+                    csvYr = title.split(' ')[1]
+                    csvMth = title.split(' ')[0][:3]
+                    csvMth = convert_mth_strings(csvMth.upper())
+                    data.append([csvYr, csvMth, url])
+
+    for link in links[:1]:
+        fileUrl = link['href']
+        url = "http://www.lewisham.gov.uk"+fileUrl
+        title = link.contents[0]
+        title = title.upper().strip()
+        csvYr = title.split(' ')[1]
+        csvMth = title.split(' ')[0][:3]
+        csvMth = convert_mth_strings(csvMth.upper())
+        data.append([csvYr, csvMth, url])
 
 
 #### STORE DATA 1.0
